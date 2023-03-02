@@ -281,6 +281,15 @@ const (
 	EncryptionAtHostDisabled EncryptionAtHost = "Disabled"
 )
 
+// HyperthreadingField represents whether a cluster is created with hyperthreading or not
+type HyperthreadingField string
+
+// HyperthreadingField constant
+const (
+	HyperthreadingDisabled HyperthreadingField = "Disabled"
+	HyperthreadingEnabled  HyperthreadingField = "Enabled"
+)
+
 // MasterProfile represents a master profile
 type MasterProfile struct {
 	MissingFields
@@ -289,6 +298,7 @@ type MasterProfile struct {
 	SubnetID            string           `json:"subnetId,omitempty"`
 	EncryptionAtHost    EncryptionAtHost `json:"encryptionAtHost,omitempty"`
 	DiskEncryptionSetID string           `json:"diskEncryptionSetId,omitempty"`
+	HyperthreadingField string           `json:"hyperthreadingField,omitempty"`
 }
 
 // VMSize represents a VM size

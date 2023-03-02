@@ -18,4 +18,8 @@ const (
 	// FeatureFlagUserDefinedRouting is the feature in the subscription that is used to indicate we need to
 	// provision a private cluster without an IP address
 	FeatureFlagUserDefinedRouting = "Microsoft.RedHatOpenShift/UserDefinedRouting"
+
+	// FeatureFlagHyperthreadingToggle is the feature in the subscription that
+	// creates clusters with hyperthreading disabled
+	FeatureFlagHyperthreadingToggle = "Microsoft.RedHatOpenShift/HyperthreadingToggle"
 )
