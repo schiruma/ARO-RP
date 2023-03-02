@@ -24,7 +24,6 @@ import (
 
 	"github.com/Azure/ARO-RP/pkg/api"
 	"github.com/Azure/ARO-RP/pkg/util/computeskus"
-	"github.com/Azure/ARO-RP/pkg/util/feature"
 	"github.com/Azure/ARO-RP/pkg/util/pullsecret"
 	"github.com/Azure/ARO-RP/pkg/util/rhcos"
 	"github.com/Azure/ARO-RP/pkg/util/stringutils"
@@ -117,10 +116,10 @@ func (m *manager) generateInstallConfig(ctx context.Context) (*installconfig.Ins
 		outboundType = azuretypes.UserDefinedRoutingOutboundType
 	}
 
-	hyperthreadingField := api.HyperthreadingEnabled
+	/*hyperthreadingField := api.HyperthreadingEnabled
 	if feature.IsRegisteredForFeature(m.sub.Properties, api.FeatureFlagHyperthreadingToggle) {
 		hyperthreadingField = api.HyperthreadingDisabled
-	}
+	}*/
 
 	installConfig := &installconfig.InstallConfig{
 		Config: &types.InstallConfig{
@@ -164,7 +163,7 @@ func (m *manager) generateInstallConfig(ctx context.Context) (*installconfig.Ins
 						},
 					},
 				},
-				Hyperthreading: types.HyperthreadingMode(hyperthreadingField),
+				Hyperthreading: types.HyperthreadingMode(m.oc.Properties.MasterProfile.HyperthreadingField),
 				Architecture:   types.ArchitectureAMD64,
 			},
 			Compute: []types.MachinePool{
