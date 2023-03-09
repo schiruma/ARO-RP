@@ -3,7 +3,7 @@ package cluster
 // Copyright (c) Microsoft Corporation.
 // Licensed under the Apache License 2.0.
 
-import (
+/*import (
 	"context"
 
 	"github.com/Azure/ARO-RP/pkg/api"
@@ -23,4 +23,4 @@ func (m *manager) setHyperthreadingToggle(ctx context.Context) error {
 	})
 	return err
 
-}
+}*/

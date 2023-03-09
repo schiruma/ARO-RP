@@ -58,7 +58,7 @@ func (m *manager) adminUpdate() []steps.Step {
 			steps.Action(m.populateRegistryStorageAccountName), // must go before migrateStorageAccounts
 			steps.Action(m.migrateStorageAccounts),
 			steps.Action(m.fixSSH),
-			steps.Action(m.setHyperthreadingToggle),
+			//steps.Action(m.setHyperthreadingToggle),
 			//steps.Action(m.removePrivateDNSZone), // TODO(mj): re-enable once we communicate this out
 		)
 	}
