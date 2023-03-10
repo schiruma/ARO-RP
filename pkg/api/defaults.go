@@ -42,9 +42,9 @@ func SetDefaults(doc *OpenShiftClusterDocument) {
 			doc.OpenShiftCluster.Properties.NetworkProfile.OutboundType = OutboundTypeLoadbalancer
 		}
 
-		/*if doc.OpenShiftCluster.Properties.MasterProfile.HyperthreadingField == "" {
+		if doc.OpenShiftCluster.Properties.MasterProfile.HyperthreadingField == "" {
 			doc.OpenShiftCluster.Properties.MasterProfile.HyperthreadingField = string(HyperthreadingEnabled)
-		}*/
+		}
 	}
 }
 

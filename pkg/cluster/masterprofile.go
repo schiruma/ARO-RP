@@ -3,7 +3,7 @@ package cluster
 // Copyright (c) Microsoft Corporation.
 // Licensed under the Apache License 2.0.
 
-/*import (
+import (
 	"context"
 
 	"github.com/Azure/ARO-RP/pkg/api"
@@ -13,14 +13,17 @@ package cluster
 func (m *manager) setHyperthreadingToggle(ctx context.Context) error {
 	var err error
 
-	hyperthreadingField := api.HyperthreadingEnabled
+	hyperthreadingField := ""
 	if feature.IsRegisteredForFeature(m.subscriptionDoc.Subscription.Properties, api.FeatureFlagHyperthreadingToggle) {
-		hyperthreadingField = api.HyperthreadingDisabled
+		hyperthreadingField = string(api.HyperthreadingDisabled)
+	} else {
+		hyperthreadingField = string(api.HyperthreadingEnabled)
 	}
+
 	m.doc, err = m.db.PatchWithLease(ctx, m.doc.Key, func(doc *api.OpenShiftClusterDocument) error {
 		doc.OpenShiftCluster.Properties.MasterProfile.HyperthreadingField = string(hyperthreadingField)
 		return nil
 	})
 	return err
 
-}*/
+}
