@@ -182,7 +182,7 @@ func (m *manager) generateInstallConfig(ctx context.Context) (*installconfig.Ins
 							},
 						},
 					},
-					Hyperthreading: "Disabled",
+					Hyperthreading: "Enabled",
 					Architecture:   types.ArchitectureAMD64,
 				},
 			},
