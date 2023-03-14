@@ -13,15 +13,13 @@ import (
 func (m *manager) setHyperthreadingToggle(ctx context.Context) error {
 	var err error
 
-	hyperthreadingField := ""
+	hyperthreadingField := api.HyperthreadingEnabled
 	if feature.IsRegisteredForFeature(m.subscriptionDoc.Subscription.Properties, api.FeatureFlagHyperthreadingToggle) {
-		hyperthreadingField = string(api.HyperthreadingDisabled)
-	} else {
-		hyperthreadingField = string(api.HyperthreadingEnabled)
+		hyperthreadingField = api.HyperthreadingDisabled
 	}
 
 	m.doc, err = m.db.PatchWithLease(ctx, m.doc.Key, func(doc *api.OpenShiftClusterDocument) error {
-		doc.OpenShiftCluster.Properties.MasterProfile.HyperthreadingField = string(hyperthreadingField)
+		doc.OpenShiftCluster.Properties.MasterProfile.HyperthreadingField = hyperthreadingField
 		return nil
 	})
 	return err

@@ -174,11 +174,11 @@ const (
 
 // MasterProfile represents a master profile.
 type MasterProfile struct {
-	VMSize              VMSize           `json:"vmSize,omitempty"`
-	SubnetID            string           `json:"subnetId,omitempty"`
-	EncryptionAtHost    EncryptionAtHost `json:"encryptionAtHost,omitempty"`
-	DiskEncryptionSetID string           `json:"diskEncryptionSetId,omitempty"`
-	HyperthreadingField string           `json:"hyperthreadingField,omitempty"`
+	VMSize              VMSize              `json:"vmSize,omitempty"`
+	SubnetID            string              `json:"subnetId,omitempty"`
+	EncryptionAtHost    EncryptionAtHost    `json:"encryptionAtHost,omitempty"`
+	DiskEncryptionSetID string              `json:"diskEncryptionSetId,omitempty"`
+	HyperthreadingField HyperthreadingField `json:"hyperthreadingField,omitempty"`
 }
 
 // VMSize represents a VM size.
