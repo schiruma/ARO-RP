@@ -492,7 +492,7 @@ func (c *Cluster) createCluster(ctx context.Context, vnetResourceGroup, clusterN
 			return err
 		}
 
-		oc.Properties.WorkerProfiles[0].VMSize = api.VMSizeStandardD2sV3
+		oc.Properties.WorkerProfiles[0].VMSize = api.VMSizeStandardD16asV4
 	}
 
 	ext := api.APIs[v20220904.APIVersion].OpenShiftClusterConverter.ToExternal(&oc)
@@ -518,6 +518,10 @@ func (c *Cluster) registerSubscription(ctx context.Context) error {
 			RegisteredFeatures: []api.RegisteredFeatureProfile{
 				{
 					Name:  "Microsoft.RedHatOpenShift/RedHatEngineering",
+					State: "Registered",
+				},
+				{
+					Name:  "Microsoft.RedHatOpenShift/HyperthreadingToggle",
 					State: "Registered",
 				},
 			},
