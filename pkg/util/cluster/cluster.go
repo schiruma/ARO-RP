@@ -492,7 +492,7 @@ func (c *Cluster) createCluster(ctx context.Context, vnetResourceGroup, clusterN
 			return err
 		}
 
-		oc.Properties.WorkerProfiles[0].VMSize = api.VMSizeStandardD16asV4
+		oc.Properties.WorkerProfiles[0].VMSize = api.VMSizeStandardD2sV3
 	}
 
 	ext := api.APIs[v20220904.APIVersion].OpenShiftClusterConverter.ToExternal(&oc)

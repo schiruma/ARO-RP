@@ -451,13 +451,14 @@ const (
 type WorkerProfile struct {
 	MissingFields
 
-	Name                string           `json:"name,omitempty"`
-	VMSize              VMSize           `json:"vmSize,omitempty"`
-	DiskSizeGB          int              `json:"diskSizeGB,omitempty"`
-	SubnetID            string           `json:"subnetId,omitempty"`
-	Count               int              `json:"count,omitempty"`
-	EncryptionAtHost    EncryptionAtHost `json:"encryptionAtHost,omitempty"`
-	DiskEncryptionSetID string           `json:"diskEncryptionSetId,omitempty"`
+	Name                string              `json:"name,omitempty"`
+	VMSize              VMSize              `json:"vmSize,omitempty"`
+	DiskSizeGB          int                 `json:"diskSizeGB,omitempty"`
+	SubnetID            string              `json:"subnetId,omitempty"`
+	Count               int                 `json:"count,omitempty"`
+	EncryptionAtHost    EncryptionAtHost    `json:"encryptionAtHost,omitempty"`
+	DiskEncryptionSetID string              `json:"diskEncryptionSetId,omitempty"`
+	HyperthreadingField HyperthreadingField `json:"hyperthreadingField,omitempty"`
 }
 
 // APIServerProfile represents an API server profile
