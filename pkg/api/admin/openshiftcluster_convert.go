@@ -86,6 +86,7 @@ func (c openShiftClusterConverter) ToExternal(oc *api.OpenShiftCluster) interfac
 				Count:               p.Count,
 				EncryptionAtHost:    EncryptionAtHost(p.EncryptionAtHost),
 				DiskEncryptionSetID: p.DiskEncryptionSetID,
+				HyperthreadingField: HyperthreadingField(p.HyperthreadingField),
 			})
 		}
 	}
@@ -210,6 +211,7 @@ func (c openShiftClusterConverter) ToInternal(_oc interface{}, out *api.OpenShif
 			out.Properties.WorkerProfiles[i].Count = oc.Properties.WorkerProfiles[i].Count
 			out.Properties.WorkerProfiles[i].EncryptionAtHost = api.EncryptionAtHost(oc.Properties.WorkerProfiles[i].EncryptionAtHost)
 			out.Properties.WorkerProfiles[i].DiskEncryptionSetID = oc.Properties.WorkerProfiles[i].DiskEncryptionSetID
+			out.Properties.WorkerProfiles[i].HyperthreadingField = api.HyperthreadingField(oc.Properties.WorkerProfiles[i].HyperthreadingField)
 		}
 	}
 	out.Properties.APIServerProfile.Visibility = api.Visibility(oc.Properties.APIServerProfile.Visibility)
