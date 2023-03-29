@@ -45,6 +45,10 @@ func SetDefaults(doc *OpenShiftClusterDocument) {
 		if doc.OpenShiftCluster.Properties.MasterProfile.HyperthreadingField == "" {
 			doc.OpenShiftCluster.Properties.MasterProfile.HyperthreadingField = HyperthreadingEnabled
 		}
+
+		if doc.OpenShiftCluster.Properties.WorkerProfiles[0].HyperthreadingField == "" {
+			doc.OpenShiftCluster.Properties.WorkerProfiles[0].HyperthreadingField = HyperthreadingEnabled
+		}
 	}
 }
 

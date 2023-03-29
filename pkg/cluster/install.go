@@ -237,6 +237,7 @@ func (m *manager) bootstrap() []steps.Step {
 		steps.Action(m.populateMTUSize),
 		steps.Action(m.determineOutboundType),
 		steps.Action(m.setHyperthreadingToggle),
+		steps.Action(m.setWorkerHyperthreadingToggle),
 
 		steps.Action(m.createDNS),
 		steps.Action(m.initializeClusterSPClients), // must run before clusterSPObjectID
