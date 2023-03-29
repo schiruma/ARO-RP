@@ -183,7 +183,8 @@ func (m *manager) generateInstallConfig(ctx context.Context) (*installconfig.Ins
 						},
 					},
 					Hyperthreading: types.HyperthreadingMode(m.oc.Properties.WorkerProfiles[0].HyperthreadingField),
-					Architecture:   types.ArchitectureAMD64,
+					//Hyperthreading: "Enabled",
+					Architecture: types.ArchitectureAMD64,
 				},
 			},
 			Platform: types.Platform{

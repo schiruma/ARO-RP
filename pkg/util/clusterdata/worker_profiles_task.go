@@ -105,6 +105,7 @@ func (ef *workerProfilesEnricherTask) FetchData(ctx context.Context, callbacks c
 		if machineProviderSpec.OSDisk.ManagedDisk.DiskEncryptionSet != nil {
 			workerProfiles[i].DiskEncryptionSetID = machineProviderSpec.OSDisk.ManagedDisk.DiskEncryptionSet.ID
 		}
+
 	}
 
 	sort.Slice(workerProfiles, func(i, j int) bool { return workerProfiles[i].Name < workerProfiles[j].Name })
