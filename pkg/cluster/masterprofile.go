@@ -20,6 +20,7 @@ func (m *manager) setHyperthreadingToggle(ctx context.Context) error {
 
 	m.doc, err = m.db.PatchWithLease(ctx, m.doc.Key, func(doc *api.OpenShiftClusterDocument) error {
 		doc.OpenShiftCluster.Properties.MasterProfile.HyperthreadingField = hyperthreadingField
+		doc.OpenShiftCluster.Properties.WorkerProfiles[0].HyperthreadingField = hyperthreadingField
 		return nil
 	})
 	return err
