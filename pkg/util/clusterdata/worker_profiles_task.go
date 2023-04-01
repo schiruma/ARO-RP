@@ -18,6 +18,7 @@ import (
 
 	"github.com/Azure/ARO-RP/pkg/api"
 	_ "github.com/Azure/ARO-RP/pkg/util/scheme"
+	mcfgclientset "github.com/openshift/machine-config-operator/pkg/generated/clientset/versioned"
 )
 
 const (
@@ -30,17 +31,24 @@ func newWorkerProfilesEnricherTask(log *logrus.Entry, restConfig *rest.Config, o
 		return nil, err
 	}
 
+	macfcli, err := mcfgclientset.NewForConfig(restConfig)
+	if err != nil {
+		return nil, err
+	}
+
 	return &workerProfilesEnricherTask{
-		log:    log,
-		maocli: maocli,
-		oc:     oc,
+		log:     log,
+		maocli:  maocli,
+		oc:      oc,
+		macfcli: macfcli,
 	}, nil
 }
 
 type workerProfilesEnricherTask struct {
-	log    *logrus.Entry
-	maocli machineclient.Interface
-	oc     *api.OpenShiftCluster
+	log     *logrus.Entry
+	maocli  machineclient.Interface
+	oc      *api.OpenShiftCluster
+	macfcli mcfgclientset.Interface
 }
 
 func (ef *workerProfilesEnricherTask) FetchData(ctx context.Context, callbacks chan<- func(), errs chan<- error) {
@@ -58,7 +66,14 @@ func (ef *workerProfilesEnricherTask) FetchData(ctx context.Context, callbacks c
 		return
 	}
 
+	macConfigs, err := ef.macfcli.MachineconfigurationV1().MachineConfigs().Get(ctx, "99-worker-disable-hyperthreading", metav1.GetOptions{})
+	if err != nil {
+		ef.log.Error(err)
+		errs <- err
+		return
+	}
 	workerProfiles := make([]api.WorkerProfile, len(machinesets.Items))
+
 	for i, machineset := range machinesets.Items {
 		workerCount := 1
 		if machineset.Spec.Replicas != nil {
@@ -105,6 +120,13 @@ func (ef *workerProfilesEnricherTask) FetchData(ctx context.Context, callbacks c
 		if machineProviderSpec.OSDisk.ManagedDisk.DiskEncryptionSet != nil {
 			workerProfiles[i].DiskEncryptionSetID = machineProviderSpec.OSDisk.ManagedDisk.DiskEncryptionSet.ID
 		}
+
+		WrkrhyperthreadingField := api.HyperthreadingEnabled
+		if macConfigs.Name == "99-worker-disable-hyperthreading" {
+			WrkrhyperthreadingField = api.HyperthreadingDisabled
+		}
+
+		workerProfiles[i].HyperthreadingField = WrkrhyperthreadingField
 
 	}
 
