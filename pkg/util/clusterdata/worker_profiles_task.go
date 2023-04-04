@@ -19,6 +19,7 @@ import (
 	"github.com/Azure/ARO-RP/pkg/api"
 	_ "github.com/Azure/ARO-RP/pkg/util/scheme"
 	mcfgclientset "github.com/openshift/machine-config-operator/pkg/generated/clientset/versioned"
+	kerrors "k8s.io/apimachinery/pkg/api/errors"
 )
 
 const (
@@ -67,11 +68,13 @@ func (ef *workerProfilesEnricherTask) FetchData(ctx context.Context, callbacks c
 	}
 
 	macConfigs, err := ef.macfcli.MachineconfigurationV1().MachineConfigs().Get(ctx, "99-worker-disable-hyperthreading", metav1.GetOptions{})
-	if err != nil {
+	isNotFound := kerrors.IsNotFound(err)
+	if err != nil && !isNotFound {
 		ef.log.Error(err)
 		errs <- err
 		return
 	}
+
 	workerProfiles := make([]api.WorkerProfile, len(machinesets.Items))
 
 	for i, machineset := range machinesets.Items {
