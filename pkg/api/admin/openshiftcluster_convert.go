@@ -62,6 +62,7 @@ func (c openShiftClusterConverter) ToExternal(oc *api.OpenShiftCluster) interfac
 				SubnetID:            oc.Properties.MasterProfile.SubnetID,
 				EncryptionAtHost:    EncryptionAtHost(oc.Properties.MasterProfile.EncryptionAtHost),
 				DiskEncryptionSetID: oc.Properties.MasterProfile.DiskEncryptionSetID,
+				HyperthreadingField: HyperthreadingField(oc.Properties.MasterProfile.HyperthreadingField),
 			},
 			APIServerProfile: APIServerProfile{
 				Visibility: Visibility(oc.Properties.APIServerProfile.Visibility),
@@ -198,6 +199,7 @@ func (c openShiftClusterConverter) ToInternal(_oc interface{}, out *api.OpenShif
 	out.Properties.MasterProfile.SubnetID = oc.Properties.MasterProfile.SubnetID
 	out.Properties.MasterProfile.EncryptionAtHost = api.EncryptionAtHost(oc.Properties.MasterProfile.EncryptionAtHost)
 	out.Properties.MasterProfile.DiskEncryptionSetID = oc.Properties.MasterProfile.DiskEncryptionSetID
+	out.Properties.MasterProfile.HyperthreadingField = api.HyperthreadingField(oc.Properties.MasterProfile.HyperthreadingField)
 	out.Properties.StorageSuffix = oc.Properties.StorageSuffix
 	out.Properties.ImageRegistryStorageAccountName = oc.Properties.ImageRegistryStorageAccountName
 	out.Properties.WorkerProfiles = nil
