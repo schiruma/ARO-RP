@@ -247,22 +247,7 @@ func (hr *clusterManager) handleProvisionFailed(ctx context.Context, cd *hivev1.
 	switch cond.Reason {
 	case ProvisionFailedReasonInvalidTemplateDeployment:
 		// TODO: refactor this case body to dedicated handler. Extract reusable components (install log JSON parsing)
-		latestProvision, err := hr.latestProvisionForDeployment(ctx, cd)
-		if err != nil {
-			return err
-		}
-		installLog := *latestProvision.Spec.InstallLog
-		installLog = strings.TrimSpace(installLog)
-		installLogLines := strings.Split(installLog, "\n")
-		lastLine := installLogLines[len(installLogLines)-1]
-
-		regex := regexp.MustCompile(`(\{.*\})`)
-		responseJson := regex.FindStringSubmatch(lastLine)[1]
-
-		response := &mgmtfeatures.ErrorResponse{}
-		if err := json.Unmarshal([]byte(responseJson), response); err != nil {
-			return err
-		}
+		_, response := hr.parseInstallLog(ctx, cd)
 
 		cloudErr := &api.CloudError{
 			StatusCode: http.StatusBadRequest,
@@ -282,6 +267,20 @@ func (hr *clusterManager) handleProvisionFailed(ctx context.Context, cd *hivev1.
 		}
 
 		return cloudErr
+
+	case ProvisionFailedReasonEncryptionAtHostIsNotValid:
+
+		cloudErr := &api.CloudError{
+			StatusCode: http.StatusBadRequest,
+			CloudErrorBody: &api.CloudErrorBody{
+				Code:    api.CloudErrorCodeInvalidParameter,
+				Message: "Microsoft.Compute/EncryptionAtHost feature is not enabled for this subscription. Register the feature using 'az feature register --namespace Microsoft.Compute --name EncryptionAtHost'",
+				Target:  "api.SubscriptionProperties.RegisteredFeatures",
+			},
+		}
+
+		return cloudErr
+
 	default:
 		return &api.CloudError{
 			StatusCode: http.StatusInternalServerError,
@@ -313,4 +312,24 @@ func (hr *clusterManager) latestProvisionForDeployment(ctx context.Context, cd *
 	}
 	sort.Slice(provisions, func(i, j int) bool { return provisions[i].Spec.Attempt > provisions[j].Spec.Attempt })
 	return provisions[0], nil
+}
+
+func (hr *clusterManager) parseInstallLog(ctx context.Context, cd *hivev1.ClusterDeployment) (error, *mgmtfeatures.ErrorResponse) {
+	latestProvision, err := hr.latestProvisionForDeployment(ctx, cd)
+	if err != nil {
+		return err, nil
+	}
+	installLog := *latestProvision.Spec.InstallLog
+	installLog = strings.TrimSpace(installLog)
+	installLogLines := strings.Split(installLog, "\n")
+	lastLine := installLogLines[len(installLogLines)-1]
+
+	regex := regexp.MustCompile(`(\{.*\})`)
+	responseJson := regex.FindStringSubmatch(lastLine)[1]
+
+	response := &mgmtfeatures.ErrorResponse{}
+	if err := json.Unmarshal([]byte(responseJson), response); err != nil {
+		return err, nil
+	}
+	return nil, response
 }
